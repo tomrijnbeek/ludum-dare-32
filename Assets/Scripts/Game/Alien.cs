@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Alien : MonoBehaviour {
+public class Alien : MonoBehaviourBase {
+
+	public float score = 25;
 
 	// Use this for initialization
 	void Start () {
@@ -11,5 +13,10 @@ public class Alien : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	void OnSatelliteHit() {
+		GameObject.Destroy(this.gameObject);
+		GameManager.Instance.OnAlienDestroyed(this);
 	}
 }

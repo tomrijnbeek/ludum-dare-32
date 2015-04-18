@@ -16,4 +16,9 @@ public class GameManager : Singleton<GameManager> {
 	void Update () {
 		score += Time.deltaTime;
 	}
+
+	public void OnAlienDestroyed(Alien a)
+	{
+		this.score += a.score;
+	}
 }
