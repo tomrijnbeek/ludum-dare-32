@@ -4,6 +4,7 @@ using System.Collections;
 public class Planet : Singleton<Planet> {
 
 	public float health, maxHealth;
+	public float rotationSpeed;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +13,7 @@ public class Planet : Singleton<Planet> {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		this.transform.Rotate(Vector3.forward, Time.deltaTime * rotationSpeed);
 	}
 
 	void ApplyDamage (float amount) {

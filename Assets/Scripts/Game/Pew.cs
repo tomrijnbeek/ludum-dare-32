@@ -6,6 +6,8 @@ public class Pew : MonoBehaviourBase {
 	public float speed;
 	public float damage = 1;
 
+	public GameObject explosionPrefab;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -20,6 +22,10 @@ public class Pew : MonoBehaviourBase {
 		if (coll.gameObject.tag == "CanReceiveDamage")
 		{
 			coll.gameObject.SendMessage("ApplyDamage", 1);
+
+			var explosion = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+			GameObject.Destroy(explosion, .2f);
+
 			GameObject.Destroy(this.gameObject);
 		}
 	}
