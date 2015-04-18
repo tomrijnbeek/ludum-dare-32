@@ -16,19 +16,24 @@ public class Satellite : MonoBehaviourBase {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.Space) && !isFree)
 		{
-			var orbit = this.GetComponent<Orbit>();
-			var mass = gameObject.AddComponent<Mass>();
-			var diff = Planet.Instance.transform.position - this.transform.position;
-			var r = diff.magnitude;
-			var dir = diff / r;
-			mass.velocity = Mathf.Deg2Rad * orbit.angularV * r * new Vector3(dir.y, -dir.x, 0);
-
-			Component.Destroy(orbit);
-			this.isFree = true;
+			this.LeaveOrbit();
 		}
 	}
 
-	void OnTriggerEnter2D(Collider2D coll)
+	void LeaveOrbit()
+	{
+		var orbit = this.GetComponent<Orbit>();
+		var mass = gameObject.AddComponent<Mass>();
+		var diff = Planet.Instance.transform.position - this.transform.position;
+		var r = diff.magnitude;
+		var dir = diff / r;
+		mass.velocity = Mathf.Deg2Rad * orbit.angularV * r * new Vector3(dir.y, -dir.x, 0);
+		
+		Component.Destroy(orbit);
+        this.isFree = true;
+    }
+    
+    void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.gameObject.tag == "Enemy")
 		{

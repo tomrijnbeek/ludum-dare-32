@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b18be90de2a14fd68f299a38bc65e9f
-timeCreated: 1429383746
+timeCreated: 1429388921
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -16,6 +16,9 @@ TextureImporter:
     21300018: satellite_4
     21300020: skyscraper
     21300022: booster
+    21300024: city_hk
+    21300026: city_dubai
+    21300028: city_ny
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -178,6 +181,36 @@ TextureImporter:
         y: 78
         width: 1
         height: 3
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city_hk
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 34
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city_dubai
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 34
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city_ny
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 34
+        width: 8
+        height: 9
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
