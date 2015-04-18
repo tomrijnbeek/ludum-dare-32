@@ -5,6 +5,7 @@ public class Planet : Singleton<Planet> {
 
 	public float health, maxHealth;
 	public float rotationSpeed;
+	public float mass;
 
 	// Use this for initialization
 	void Start () {

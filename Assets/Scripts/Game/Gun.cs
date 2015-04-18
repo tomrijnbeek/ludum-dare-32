@@ -9,9 +9,13 @@ public class Gun : MonoBehaviourBase {
 	public float nextShot;
 	public GameObject pewPrefab;
 
+	public AudioClip[] shootSounds;
+	private new AudioSource audio;
+
 	// Use this for initialization
 	void Start () {
 		nextShot = Random.Range(minTimeBetweenShots, maxTimeBetweenShots);
+		audio = this.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -28,5 +32,8 @@ public class Gun : MonoBehaviourBase {
 	void Shoot()
 	{
 		Instantiate(pewPrefab, this.transform.position, this.transform.rotation);
+
+		if (this.shootSounds.Length > 0 && !AudioListener.pause)
+			audio.PlayOneShot(this.shootSounds[Random.Range(0, this.shootSounds.Length)]);
 	}
 }
