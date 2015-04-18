@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pew : MonoBehaviour {
+public class Pew : MonoBehaviourBase {
 
 	public float speed;
 	public float damage = 1;

@@ -3,7 +3,9 @@ using System.Collections;
 
 public class GameManager : Singleton<GameManager> {
 
-	private Planet planet;
+	public float score;
+
+	Planet planet;
 
 	// Use this for initialization
 	void Start () {
@@ -12,6 +14,6 @@ public class GameManager : Singleton<GameManager> {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		score += Time.deltaTime;
 	}
 }

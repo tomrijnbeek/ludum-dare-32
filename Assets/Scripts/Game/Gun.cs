@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Gun : MonoBehaviour {
+public class Gun : MonoBehaviourBase {
 
 	public const float minTimeBetweenShots = 2;
 	public const float maxTimeBetweenShots = 3;
