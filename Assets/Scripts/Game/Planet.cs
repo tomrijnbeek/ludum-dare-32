@@ -19,5 +19,8 @@ public class Planet : Singleton<Planet> {
 
 	void ApplyDamage (float amount) {
 		this.health -= amount;
+
+		if (health <= 0)
+			GameManager.Instance.EndGame();
 	}
 }

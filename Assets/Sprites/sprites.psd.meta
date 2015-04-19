@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b18be90de2a14fd68f299a38bc65e9f
-timeCreated: 1429388921
+timeCreated: 1429462930
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -19,6 +19,7 @@ TextureImporter:
     21300024: city_hk
     21300026: city_dubai
     21300028: city_ny
+    21300030: overlay_bg
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -211,6 +212,16 @@ TextureImporter:
         y: 34
         width: 8
         height: 9
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: overlay_bg
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 113
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

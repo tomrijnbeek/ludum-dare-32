@@ -4,11 +4,13 @@ using System.Collections;
 
 public class UIManager : Singleton<UIManager> {
 
-	public Text score;
+	public Text score, gameOverScore;
 	public Slider healthbar;
 
 	private Planet planet;
 	private GameManager gameManager;
+
+	public GameObject hud, gameOver;
 
 	public bool muted;
 
@@ -29,5 +31,12 @@ public class UIManager : Singleton<UIManager> {
 	public void ToggleSound() {
 		muted = !muted;
 		AudioListener.pause = muted;
+	}
+
+	public void OnGameOver() {
+		gameOverScore.text = string.Format("Score: {0}", Mathf.RoundToInt(gameManager.score));
+
+		hud.SetActive(false);
+		gameOver.SetActive(true);
 	}
 }
