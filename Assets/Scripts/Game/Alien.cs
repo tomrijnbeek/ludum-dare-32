@@ -4,7 +4,7 @@ using System.Collections;
 public class Alien : MonoBehaviourBase {
 
 	public float score = 25;
-	public GameObject gunPrefab;
+	public GameObject gunPrefab, explosionPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +19,9 @@ public class Alien : MonoBehaviourBase {
 	void OnSatelliteHit() {
 		GameObject.Destroy(this.gameObject);
 		GameManager.Instance.OnAlienDestroyed(this);
+
+		var explosion = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+		GameObject.Destroy(explosion, .2f);
 	}
 
 	void OrbitReached() {

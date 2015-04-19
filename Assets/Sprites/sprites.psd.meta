@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b18be90de2a14fd68f299a38bc65e9f
-timeCreated: 1429462930
+timeCreated: 1429474477
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -98,23 +98,23 @@ TextureImporter:
     - name: health_bg
       rect:
         serializedVersion: 2
-        x: 81
-        y: 77
-        width: 9
-        height: 9
+        x: 55
+        y: 12
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 3, y: 3, z: 3, w: 3}
+      border: {x: 10, y: 10, z: 10, w: 10}
     - name: health_fill
       rect:
         serializedVersion: 2
-        x: 91
-        y: 77
-        width: 9
-        height: 9
+        x: 93
+        y: 12
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 3, y: 3, z: 3, w: 3}
+      border: {x: 10, y: 10, z: 10, w: 10}
     - name: pixel
       rect:
         serializedVersion: 2
@@ -212,8 +212,8 @@ TextureImporter:
         y: 34
         width: 8
         height: 9
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: -3.18069911, y: 1.18706346}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: overlay_bg
       rect:
