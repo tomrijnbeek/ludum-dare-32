@@ -3,7 +3,8 @@ using System.Collections;
 
 public class ProjectedPath : MonoBehaviour {
 
-	public int pathSegments = 20;
+	public int pathSegments;
+	public float stepSize;
 	public Vector3 velocity;
 	public float mass;
 
@@ -24,7 +25,7 @@ public class ProjectedPath : MonoBehaviour {
 			children[i].transform.parent = transform;
 
 			sprites = children[i].GetComponent<SpriteRenderer>();
-			sprites.color = new Color(sprites.color.r, sprites.color.g, sprites.color.b, (children.Length - i) * sprites.color.a);
+			sprites.color = sprites.color.WithAlpha((children.Length - i) * sprites.color.a / children.Length);
 		}
 	}
 
@@ -34,8 +35,6 @@ public class ProjectedPath : MonoBehaviour {
 
 		var p = transform.parent.position;
 		var v = velocity;
-
-		const float stepSize = .4f;
 
 		for (int i = 0; i < pathSegments; i++)
 		{
