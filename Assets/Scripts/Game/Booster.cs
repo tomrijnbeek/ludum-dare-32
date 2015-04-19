@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Booster : MonoBehaviourBase {
 
-	GameObject parent;
-	Mass mass;
+	Transform parent;
 
-	float skyscraperMass;
-
+	public float currentSpeed;
 	public float acceleration;
 
 	public float velocityTransferRatio;
@@ -15,17 +13,15 @@ public class Booster : MonoBehaviourBase {
 
 	// Use this for initialization
 	void Start () {
-		parent = this.transform.parent.gameObject;
-		mass = parent.GetComponent<Mass>();
-		mass.velocity = this.parent.transform.TransformDirection(.02f * Vector3.left + 0.1f * Vector3.up);
-		skyscraperMass = mass.mass;
-		mass.mass = 1;
+		parent = this.transform.parent;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		currentSpeed += acceleration * Time.deltaTime;
+
 		var forward = transform.TransformDirection(Vector3.up);
-		mass.velocity += forward * acceleration * Time.deltaTime;
+		parent.position += forward * currentSpeed * Time.deltaTime;
 	}
 
 	void OnTriggerExit2D(Collider2D coll)
@@ -43,13 +39,13 @@ public class Booster : MonoBehaviourBase {
 			Destroy (flame.gameObject);
 
 		parent.gameObject.GetComponent<BurnInAtmosphere>().EnableIn(.25f);
-		this.mass.mass = skyscraperMass;
+		parent.gameObject.GetComponent<Mass>().velocity = currentSpeed * parent.TransformDirection(Vector3.up);
 
-		var mass = this.gameObject.AddComponent<Mass>();
-		mass.velocity = this.mass.velocity * velocityTransferRatio + transform.TransformDirection(Vector3.right) * detachSpeed;
-		mass.mass = skyscraperMass;
+		var mass = GetComponent<Mass>();
+		mass.enabled = true;
+		mass.velocity = this.currentSpeed * transform.TransformDirection(Vector3.up) * velocityTransferRatio + transform.TransformDirection(Vector3.right) * detachSpeed;
 
-		this.gameObject.AddComponent<RotateToVelocity>();
+		this.GetComponent<RotateToVelocity>().enabled = true;
 		this.GetComponent<BurnInAtmosphere>().EnableIn(.25f);
 	}
 }

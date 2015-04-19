@@ -3,6 +3,8 @@ using System.Collections;
 
 public class InputManager : Singleton<InputManager> {
 
+	public IDraggable dragging;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -10,18 +12,24 @@ public class InputManager : Singleton<InputManager> {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && dragging == null)
 			CastRay();
+		else if (Input.GetMouseButtonUp(0) && dragging != null)
+		{
+			this.dragging.MouseUp();
+			this.dragging = null;
+		}
+
 	}
 
 	void CastRay() {
 		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		var hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-		IClickable clickable;
-		if (hit && (clickable = hit.collider.gameObject.GetInterfaceComponent<IClickable>()) != null)
+		IDraggable draggable;
+		if (hit && (draggable = hit.collider.gameObject.GetInterfaceComponent<IDraggable>()) != null && draggable.MouseDown())
 		{
-			clickable.OnMouseClick();
+			dragging = draggable;
 		}
 	}
 }

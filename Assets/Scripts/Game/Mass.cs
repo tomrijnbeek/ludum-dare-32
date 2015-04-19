@@ -18,6 +18,7 @@ public class Mass : MonoBehaviour {
 		var diff = planet.transform.position - this.transform.position;
 		var r = diff.magnitude;
 		this.velocity += diff / (r * r * r) * planet.mass * this.mass * Time.deltaTime;
+		this.velocity.z = 0;
 		this.transform.position = this.transform.position + Time.deltaTime * velocity;
 	}
 }

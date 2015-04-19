@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Satellite : MonoBehaviourBase {
+public class Satellite : MonoBehaviourBase, IDraggable {
 
-	private bool isFree;
+	private bool isFree, dragging;
+	private ProjectedPath path;
 
+	public GameObject pathPrefab;
 	public Sprite[] sprites;
+
+	public float mass;
 
 	// Use this for initialization
 	void Start () {
@@ -14,9 +18,9 @@ public class Satellite : MonoBehaviourBase {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.Space) && !isFree)
+		if (dragging)
 		{
-			this.LeaveOrbit();
+			path.velocity = TangentialVelocity() + MouseVelocity();
 		}
 	}
 
@@ -24,10 +28,9 @@ public class Satellite : MonoBehaviourBase {
 	{
 		var orbit = this.GetComponent<Orbit>();
 		var mass = gameObject.AddComponent<Mass>();
-		var diff = Planet.Instance.transform.position - this.transform.position;
-		var r = diff.magnitude;
-		var dir = diff / r;
-		mass.velocity = Mathf.Deg2Rad * orbit.angularV * r * new Vector3(dir.y, -dir.x, 0);
+
+		mass.velocity = this.TangentialVelocity();
+		mass.mass = this.mass;
 		
 		Component.Destroy(orbit);
         this.isFree = true;
@@ -41,8 +44,56 @@ public class Satellite : MonoBehaviourBase {
 			
 			//var explosion = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
 			//GameObject.Destroy(explosion, .2f);
-			
+
+			SatelliteManager.Instance.OnSatelliteDestroyed(this);
 			GameObject.Destroy(this.gameObject);
 		}
+	}
+
+	public bool MouseDown()
+	{
+		if (isFree || dragging) return false;
+
+		this.dragging = true;
+
+		var pathObj = Instantiate(pathPrefab);
+		pathObj.transform.parent = transform;
+		this.path = pathObj.GetComponent<ProjectedPath>();
+		this.path.mass = this.mass;
+
+		return true;
+	}
+
+	public void MouseUp()
+	{
+		if (!dragging) return;
+
+		LeaveOrbit();
+		GetComponent<Mass>().velocity += MouseVelocity();
+
+		Destroy (this.path.gameObject);
+		this.path = null;
+		dragging = false;
+	}
+
+	Vector3 TangentialVelocity()
+	{
+		var orbit = this.GetComponent<Orbit>();
+
+		var diff = Planet.Instance.transform.position - this.transform.position;
+		var r = diff.magnitude;
+		var dir = diff / r;
+		return Mathf.Deg2Rad * orbit.angularV * r * new Vector3(dir.y, -dir.x, 0);
+	}
+
+	Vector3 MouseVelocity()
+	{
+		var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		var rawForce = worldPos - transform.position;
+		
+		const float transferFactor = .7f;
+		const float maxVelocity = 3.5f;
+
+		return Vector3.ClampMagnitude(transferFactor * rawForce, maxVelocity);
 	}
 }
