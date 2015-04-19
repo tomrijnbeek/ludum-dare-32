@@ -11,6 +11,8 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 
 	public float mass;
 
+	public float maxFreeTime;
+
 	// Use this for initialization
 	void Start () {
 		this.GetComponent<SpriteRenderer>().sprite = this.sprites[Random.Range(0, this.sprites.Length)];
@@ -34,7 +36,18 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 		
 		Component.Destroy(orbit);
         this.isFree = true;
+
+		Invoke ("Despawn", maxFreeTime);
     }
+
+	void Despawn()
+	{
+		var despawn = gameObject.AddComponent<FlashingDespawning>();
+		despawn.duration = 2;
+		despawn.flashingFrequency = 4;
+
+		SatelliteManager.Instance.OnSatelliteDestroyed(this);
+	}
     
     void OnTriggerEnter2D(Collider2D coll)
 	{
@@ -91,8 +104,8 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 		var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		var rawForce = worldPos - transform.position;
 		
-		const float transferFactor = .7f;
-		const float maxVelocity = 3.5f;
+		const float transferFactor = 1.2f;
+		const float maxVelocity = 5.2f;
 
 		return Vector3.ClampMagnitude(transferFactor * rawForce, maxVelocity);
 	}

@@ -6,12 +6,14 @@ public class SatelliteManager : Singleton<SatelliteManager> {
 
 	public GameObject satellitePrefab;
 
-	public int initialSatellites, maxSatellites;
+	public int initialSatellites, maxSatellites, fasterSpawnThreshold;
 	public float minRadius, maxRadius;
 	public float timeBetweenSpawns;
 	public float nextSpawn { get; private set; }
 
 	public List<Satellite> satellites;
+
+	public float f;
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +27,9 @@ public class SatelliteManager : Singleton<SatelliteManager> {
 	
 	// Update is called once per frame
 	void Update () {
-		nextSpawn -= Time.deltaTime;
+		f = satellites.Count > fasterSpawnThreshold ? 1 : 1 + (1 - (float)satellites.Count / (fasterSpawnThreshold + 1)) * .5f * timeBetweenSpawns;
+
+		nextSpawn -= Time.deltaTime * f;
 		if (nextSpawn < 0 && satellites.Count < maxSatellites)
 		{
 			SpawnSatellite();
@@ -50,5 +54,7 @@ public class SatelliteManager : Singleton<SatelliteManager> {
 
 		var orbit = obj.GetComponent<Orbit>();
 		orbit.angularV = Random.value < .5 ? -v : v;
+
+		this.satellites.Add(obj.GetComponent<Satellite>());
 	}
 }
