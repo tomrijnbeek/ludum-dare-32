@@ -147,7 +147,7 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 		}
 		
 		const float transferFactor = 1.2f;
-		const float maxVelocity = 5.2f;
+		const float maxVelocity = 5.4f;
 
 		return Vector3.ClampMagnitude(transferFactor * rawForce, maxVelocity);
 	}

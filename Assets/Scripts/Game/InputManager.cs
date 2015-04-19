@@ -20,6 +20,10 @@ public class InputManager : Singleton<InputManager> {
 			this.dragging = null;
 		}
 
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 	}
 
 	void CastRay() {
