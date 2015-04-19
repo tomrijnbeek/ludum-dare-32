@@ -10,7 +10,7 @@ public class UIManager : Singleton<UIManager> {
 	private Planet planet;
 	private GameManager gameManager;
 
-	public GameObject hud, gameOver;
+	public GameObject tutorial, hud, gameOver;
 
 	public bool muted;
 
@@ -31,6 +31,10 @@ public class UIManager : Singleton<UIManager> {
 	public void ToggleSound() {
 		muted = !muted;
 		AudioListener.pause = muted;
+	}
+
+	public void OnGameStart() {
+		tutorial.SetActive(false);
 	}
 
 	public void OnGameOver() {

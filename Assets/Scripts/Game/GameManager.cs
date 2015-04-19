@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager> {
 	// Use this for initialization
 	void Start () {
 		this.planet = Planet.Instance;
+		Time.timeScale = 0;
 	}
 	
 	// Update is called once per frame
@@ -28,6 +29,12 @@ public class GameManager : Singleton<GameManager> {
 			return;
 
 		this.score += a.score;
+	}
+
+	public void StartGame()
+	{
+		Time.timeScale = 1;
+		UIManager.Instance.OnGameStart();
 	}
 
 	public void EndGame()
