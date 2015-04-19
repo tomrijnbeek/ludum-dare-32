@@ -6,12 +6,17 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 	private bool isFree, dragging;
 	private ProjectedPath path;
 
-	public GameObject pathPrefab;
+	public GameObject pathPrefab, rocketPrefab;
 	public Sprite[] sprites;
 
 	public float mass;
 
 	public float maxFreeTime;
+
+	GameObject skyscraper;
+
+	public float leaveDelay, timeUntilLeave;
+	public Vector3 mouseVelocity;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +28,14 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 		if (dragging)
 		{
 			path.velocity = TangentialVelocity() + MouseVelocity();
+			path.projectedPos = ProjectedPos();
+		}
+
+		if (skyscraper != null)
+		{
+			timeUntilLeave -= Time.deltaTime;
+			if (timeUntilLeave <= 0)
+				Shoot ();
 		}
 	}
 
@@ -65,7 +78,7 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 
 	public bool MouseDown()
 	{
-		if (isFree || dragging) return false;
+		if (isFree || dragging || skyscraper != null) return false;
 
 		this.dragging = true;
 
@@ -79,14 +92,34 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 
 	public void MouseUp()
 	{
-		if (!dragging) return;
+		if (!dragging || skyscraper != null) return;
 
-		LeaveOrbit();
-		GetComponent<Mass>().velocity += MouseVelocity();
+		mouseVelocity = MouseVelocity();
+
+		var planetPosition = Planet.Instance.transform.position;
+		var planetCoords = (ProjectedPos() - planetPosition).normalized * 8;
+
+		skyscraper = Instantiate (rocketPrefab);
+		skyscraper.transform.position = planetPosition + planetCoords;
+		skyscraper.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(planetCoords.y, planetCoords.x) - 90, Vector3.forward);
 
 		Destroy (this.path.gameObject);
 		this.path = null;
 		dragging = false;
+
+		timeUntilLeave = leaveDelay;
+	}
+
+	void Shoot()
+	{
+		if (isFree)
+			return;
+
+		LeaveOrbit();
+		GetComponent<Mass>().velocity += mouseVelocity;
+
+		Destroy (skyscraper);
+		skyscraper = null;
 	}
 
 	Vector3 TangentialVelocity()
@@ -103,10 +136,30 @@ public class Satellite : MonoBehaviourBase, IDraggable {
 	{
 		var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		var rawForce = worldPos - transform.position;
+
+		var toPlanet = Planet.Instance.transform.position - transform.position;
+		if (Vector3.Dot (toPlanet, rawForce) > 0)
+		{
+			if (Vector3.Dot (new Vector3(toPlanet.y, -toPlanet.x), rawForce) > 0)
+				rawForce = new Vector3(toPlanet.y, -toPlanet.x).normalized * rawForce.magnitude;
+			else
+				rawForce = new Vector3(-toPlanet.y, toPlanet.x).normalized * rawForce.magnitude;
+		}
 		
 		const float transferFactor = 1.2f;
 		const float maxVelocity = 5.2f;
 
 		return Vector3.ClampMagnitude(transferFactor * rawForce, maxVelocity);
+	}
+
+	Vector3 ProjectedPos()
+	{
+		var planetPosition = Planet.Instance.transform.position;
+
+		var planetCoords = transform.position - planetPosition;
+		var a = Mathf.Atan2(planetCoords.y, planetCoords.x);
+		var projectedA = a + leaveDelay * GetComponent<Orbit>().angularV * Mathf.Deg2Rad;
+
+		return planetPosition + new Vector3(Mathf.Cos (projectedA), Mathf.Sin(projectedA), 0) * planetCoords.magnitude;
 	}
 }

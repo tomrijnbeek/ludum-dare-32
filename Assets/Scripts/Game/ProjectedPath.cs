@@ -5,7 +5,7 @@ public class ProjectedPath : MonoBehaviour {
 
 	public int pathSegments;
 	public float stepSize;
-	public Vector3 velocity;
+	public Vector3 velocity, projectedPos;
 	public float mass;
 
 	public GameObject[] children;
@@ -18,6 +18,7 @@ public class ProjectedPath : MonoBehaviour {
 
 		var sprites = children[0].AddComponent<SpriteRenderer>();
 		sprites.sprite = GetComponent<SpriteRenderer>().sprite;
+		sprites.color = GetComponent<SpriteRenderer>().color;
 
 		for (int i = 1; i < children.Length; i++)
 		{
@@ -25,7 +26,7 @@ public class ProjectedPath : MonoBehaviour {
 			children[i].transform.parent = transform;
 
 			sprites = children[i].GetComponent<SpriteRenderer>();
-			sprites.color = sprites.color.WithAlpha((children.Length - i) * sprites.color.a / children.Length);
+			sprites.color = sprites.color.WithAlpha(Mathf.Clamp01((children.Length - i) * sprites.color.a / children.Length));
 		}
 	}
 
@@ -33,7 +34,7 @@ public class ProjectedPath : MonoBehaviour {
 	void Update () {
 		var planet = Planet.Instance;
 
-		var p = transform.parent.position;
+		var p = projectedPos;
 		var v = velocity;
 
 		for (int i = 0; i < pathSegments; i++)
